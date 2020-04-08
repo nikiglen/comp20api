@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html>
+
+<head>
+	<title>
+		LOTR Quote Generator
+	</title>
+	<meta charset="utf-8"/>
+
+	<style type="text/css">
+		div.quote {
+			font-family: Georgia, serif;
+			font-size: 2em;
+			margin: 20px;
+			text-align: center;
+		}
+		p.header {
+			font-family: Georgia, serif;
+			font-size: 1.5em;
+			text-align: center;
+			margin: 40px;
+			color: blue;
+		}
+
+		div.about {
+			font-family: Georgia, serif;
+			font-size: 1em;
+			margin: 20px;
+			max-width: 1000px;
+		}
+
+		div {
+			font-family: Georgia, serif;
+			font-size: 1em;
+		}
+	</style>
+
+
+	<script>
+		key = "aiib6hSkVQ7CZqEdBJNr";
+
+		function getQuote() {
+			request = new XMLHttpRequest();
+
+			request.open("GET", "https://the-one-api.herokuapp.com/v1/quote", true);
+
+			request.setRequestHeader("Authorization", "Bearer " + key);
+
+			request.onreadystatechange = function() {
+				if (request.readyState == 4 && request.status == 200) 
+				{
+					result = request.responseText;
+
+					all_quotes = JSON.parse(result);
+					total = all_quotes["docs"].length;
+
+					num = Math.floor(Math.random() * (total - 1));
+
+					document.getElementById("quote").innerHTML = JSON.stringify(all_quotes["docs"][num]["dialog"]);
+				}
+				else if (request.readyState == 4 && request.status != 200)
+				{
+					alert("Something went wrong! Try reloading the page.");
+				}
+			}
+			request.send();
+		}
+	</script>
+</head>
+
+<body>
+	<script type="text/javascript">
+		getQuote();
+	</script>
+
+	<p class="header">LOTR Random Quote Generated:</p>
+
+	<div id="quote" class="quote"></div>
+
+	<br /><br /><br /><br />
+	<div>About this API:</div>
+	<div class="about">
+		This API is called The Lord of the Rings API. It can be used to access a database of information about the LOTR books and movies. It can be found here: <a href="https://the-one-api.herokuapp.com/">https://the-one-api.herokuapp.com/</a>
+		<br /><br />
+		I used the "quote" option, which returns a giant list of ~2000 quotes from the books. My code picks a random quote from the list and displays it. Another helpful application of this API could use the "character" option to search for a specific character requested by the user and then display information about that person in universe. You could also use the API to search for a quote with keywords, once again using the "quote" option. This would be helpful since fans like to quote the books, but can't always remember the exact wording of a quote.
+	</div>
+	
+</body>
+
+</html> 
